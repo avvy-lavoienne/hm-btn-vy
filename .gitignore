@@ -18,3 +18,4 @@ savestates/
 screenshots/
 *.log
 *.state
+dist/
