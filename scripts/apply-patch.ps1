@@ -56,7 +56,7 @@ $target = Join-Path $outDir 'HARVESTMOON.bin'
 
 Write-Host ''
 Write-Host 'Menerapkan patch...'
-& $xdelta.Source -d -f -s $Source $patch $target
+& ($xdelta.FullName) -d -f -s $Source $patch $target
 if ($LASTEXITCODE -ne 0) { throw "xdelta3 gagal dengan kode $LASTEXITCODE" }
 
 $cue = @(

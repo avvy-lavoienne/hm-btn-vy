@@ -54,7 +54,9 @@ powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1
 ```
 
 Skrip ini membuat folder kerja, mengunduh DuckStation, DeltaPatcher, xdelta3, dan
-file patch v1.6, lalu memverifikasi hash masing-masing.
+file patch v1.6, lalu memverifikasi hash masing-masing. Skrip juga memasang
+`config\settings.ini` ke folder emulator sehingga Setup Wizard DuckStation tidak
+muncul saat pertama dijalankan.
 
 ### 3.3 Pindahkan disc dan BIOS
 

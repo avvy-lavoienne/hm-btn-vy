@@ -72,6 +72,13 @@ Write-Host '[ext] emulator'
 Expand-Archive -Path (Join-Path $root 'downloads\duckstation.zip') -DestinationPath (Join-Path $root 'emulator') -Force
 Set-Content -Path (Join-Path $root 'emulator\portable.txt') -Value '' -Encoding ASCII
 
+$cfgTemplate = Join-Path $root 'config\settings.ini'
+$cfgTarget = Join-Path $root 'emulator\settings.ini'
+if ((Test-Path $cfgTemplate) -and -not (Test-Path $cfgTarget)) {
+    Copy-Item $cfgTemplate -Destination $cfgTarget -Force
+    Write-Host '[ok  ] settings.ini awal dipasang, Setup Wizard dilewati'
+}
+
 Write-Host '[ext] tools'
 Expand-Archive -Path (Join-Path $root 'downloads\deltapatcher.zip') -DestinationPath (Join-Path $root 'tools') -Force
 Expand-Archive -Path (Join-Path $root 'downloads\xdelta3.zip') -DestinationPath (Join-Path $root 'tools\xdelta3') -Force

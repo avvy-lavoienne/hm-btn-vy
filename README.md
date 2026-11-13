@@ -45,6 +45,8 @@ hm-btn-vy\
   docs\
     MOD-FEATURES-AND-IDEAS.md   katalog fitur v1.0-v1.6 + 33 ide patch lanjutan
     SETUP.md                    panduan lengkap PC dan laptop
+  config\
+    settings.ini          template konfigurasi DuckStation, dipasang oleh setup.ps1
   emulator\                (gitignored) hasil setup.ps1
   tools\                   (gitignored) DeltaPatcher + xdelta3
   patch\                   (gitignored) file .xdelta

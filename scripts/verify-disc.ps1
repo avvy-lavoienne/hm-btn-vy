@@ -11,7 +11,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-$expectedSha1 = 'CB26381FA1336BBD15F07469E59F1143CCF37B03'
+$expectedSha1 = 'CB26381FA1336BDD15F07469E59F1143CCF37B03'
 
 if (-not $Directory) { $Directory = Join-Path $root 'local\disc-original' }
 
