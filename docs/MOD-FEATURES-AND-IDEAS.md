@@ -204,7 +204,51 @@ Kolom "Target" menunjuk modul decomp yang paling relevan, bukan lokasi final.
 
 ## 4. Batasan yang wajib dicek sebelum menulis kode
 
-- **VRAM 1 MB.** Sprite dan portrait baru harus menggantikan, bukan menambah. Ide 29–31 mentok di sini.
+### 4.1 VRAM 1 MB: batas arsitektur, bukan pilihan
+
+PlayStation punya VRAM tepat **1 MB (512K × 16-bit)** dan angka itu tidak bisa
+ditambah. Alasannya bukan ketersediaan chip, tapi pengalamatan: GPU menunjuk VRAM
+dengan koordinat 10-bit (x 0–1023) dan 9-bit (y 0–511) pada 16 bpp, sehingga
+ruang maksimumnya 1024 × 512 × 2 byte = 1.048.576 byte. Alamat di luar itu tidak
+punya representasi, jadi menambah chip fisik pun tidak akan terpakai oleh GPU.
+
+Yang **bisa** diperluas di emulator adalah **RAM utama**, bukan VRAM. DuckStation
+menyediakan expanded memory 4–16 MB (dan opsi force full RAM mapping), tapi itu
+memori CPU yang semula 2 MB. Tidak ada hubungannya dengan tekstur, dan game retail
+tidak akan memakainya.
+
+Anggaran kasar VRAM:
+
+| Pemakai | Perkiraan |
+|---|---|
+| Framebuffer 320×240×16-bit | ±150 KB per buffer |
+| Double buffer | ±300 KB |
+| Sisa untuk tekstur, sprite, CLUT, tile map | ±700 KB |
+
+Konsekuensinya: setiap sprite atau portrait baru **menggantikan** yang lama, tidak
+pernah menambah. Ide 29–31 di bagian 3.4 mentok di sini.
+
+Trik yang dipakai game asli dan mod ini untuk tetap terlihat kaya:
+
+1. **Palette swap (CLUT).** Satu tekstur, banyak warna: hen White/Brown/Lavender/Grey,
+   12 tack color, 11 outfit, dan yarn ball semuanya nol tekstur baru.
+2. **Reuse sel sprite.** Kepala di Villagers page v1.4 dipotong dari sprite warga
+   yang sudah ada di disc.
+3. **Turunkan kedalaman warna.** 4-bit CLUT (16 warna) memakai seperempat ruang
+   dibanding 8-bit (256 warna), dan jauh lebih hemat dibanding 16-bit langsung.
+4. **Tukar tekstur per area.** Upload dan buang tekstur saat pindah map, pola yang
+   sudah dipakai overlay `17_GF_MG1`–`25_GF_MG5`. Ini yang membuat "seni baru"
+   mungkin, asalkan tidak semua harus berada di VRAM sekaligus.
+5. **Komposit dari potongan.** UI dibangun dari tile 8×8 lewat `ui/window_frame.c`
+   dan `ui/bg_tile.c`, bukan dari satu gambar besar.
+
+Patokan praktis: sprite karakter 16×16 4-bit hanya ±128 byte, tapi portrait besar
+bisa puluhan KB. Kalau sebuah ide butuh lebih dari ±50 KB tekstur yang harus selalu
+ada di VRAM, kemungkinan besar ada aset lain yang harus dikorbankan atau dipindah
+ke mekanisme swap.
+
+### 4.2 Batasan lain
+
 - **Ukuran save tetap.** Flag baru harus memakai bit kosong di `event_flags.c`, bukan menambah field.
 - **Ruang disc masih longgar.** Patch v1.6 menambah sekitar 629 sector (±1,4 MB); disc PS1 punya ruang lebih.
 - **Kompatibilitas save.** Setiap perubahan struktur state berisiko seperti peringatan resmi mod: save "Marry all" di versi lama bisa merusak game.
